@@ -1,3 +1,4 @@
-<p>
-  input works!
-</p>
+<div class="input-container">
+  <ion-input class="input" type="text" (input)='validate($event.target.value)' [ngClass]="{'input-error': hasError()}"></ion-input>
+  <div class="error" *ngIf="hasError()">{{ errors[0] }}</div>
+</div>
