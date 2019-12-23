@@ -10,6 +10,6 @@
 </ion-header>
 
 <ion-content>
-  <app-input type="email"></app-input>
-  <app-input type="password"></app-input>
+  <app-input type="email" (return)="inputReturn($event, 'email')"></app-input>
+  <app-input type="password" (return)="inputReturn($event, 'password')"></app-input>
 </ion-content>

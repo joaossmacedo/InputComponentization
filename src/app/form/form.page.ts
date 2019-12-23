@@ -13,4 +13,9 @@ export class FormPage implements OnInit {
 
   ngOnInit() {
   }
+
+  inputReturn(result, type){
+    console.log("Result: ", result)
+    console.log("Type: ", type)
+  }
 }

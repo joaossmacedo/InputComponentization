@@ -2,7 +2,7 @@
   display: block;
 
   width: 90%;
-  min-height: 50px;
+  height: 53px;
   margin: 10px auto;
 
   .input {
@@ -11,7 +11,7 @@
     border-top-right-radius: 10px;
     border-bottom: solid black 1px;
     width: 100%;
-    height: 100%;
+    --padding-start: 10px;
   }
 
   .input-error {
@@ -21,5 +21,40 @@
   .error {
     color: red;
     font-size: 12px;
+    transition: 0.5s linear;
   }
 }
+
+.fade-in {
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 0.5s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+// .fade-out {
+// 	opacity: 1;
+// 	animation-name: fadeOutOpacity;
+// 	animation-iteration-count: 1;
+// 	animation-timing-function: ease-in;
+// 	animation-duration: 2s;
+// }
+
+// @keyframes fadeOutOpacity {
+// 	0% {
+// 		opacity: 1;
+// 	}
+// 	100% {
+// 		opacity: 0;
+// 	}
+// }
