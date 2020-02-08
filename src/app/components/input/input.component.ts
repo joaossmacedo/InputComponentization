@@ -1,4 +1,7 @@
+import { MaskService } from './../../services/mask.service';
+import { ValidationService } from '../../services/validation.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
 
 @Component({
   selector: 'app-input',
@@ -7,83 +10,73 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class InputComponent implements OnInit {
   @Input() type;
+  @Input() placeholder;
   @Output() return = new EventEmitter();
 
+  id = this.generate_id();
   errors;
-
   value;
 
   ionViewWillEnter() {
     this.value = '';
   }
 
-  constructor() { }
+  constructor(public validation: ValidationService, public mask: MaskService) { }
 
   ngOnInit() {
     this.errors = [];
-    // const error = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
-    //   ' Mauris vulputate nec erat in dignissim. Donec ut ligula' +
-    //   ' ac risus dignissim.';
-    // this.errors.push(error);
   }
 
   hasError() {
-    return this.errors && this.errors.length > 0
+    return this.errors && this.errors.length > 0;
   }
 
-  getPlaceholder() {
-    var ret = '';
+  onInput(event) {
+    let errors = [];
 
-    if (this.type === 'email') {
-      ret = 'E-mail';
-    } else if (this.type === 'password') {
-      ret = 'Senha';
+    // mask
+    if (this.type === 'phone') {
+      this.mask.maskPhone(event);
     }
 
-    return ret;
-  }
-
-  validate(value) {
-    console.log('validating ' + this.type)
-    console.log('value: ' + value)
-    var errors = []
-
+    // validation
     if (this.type === 'email') {
-      errors = this.validateEmail(value);
+      errors = this.validation.validateEmail(event.value);
     } else if (this.type === 'password') {
-      errors = this.validatePassword(value);
+      errors = this.validation.validatePassword(event.value);
+    } else if (this.type === 'phone') {
+      errors = this.validation.validatePhone(event.value);
     }
 
     this.errors = errors;
 
     this.return.emit({
-      'input': value,
-      'errors': this.errors
-    })
+      input: event.value,
+      errors: this.errors
+    });
   }
 
 
-  validateEmail(email) {
-    var ret = [];
+  getHeight() {
+    let height = 52;
+    const input = document.querySelector('#' + this.id + ' .input');
+    const error = document.querySelector('#' + this.id + ' .error');
 
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if (!re.test(String(email).toLowerCase())) {
-      ret.push('invalid email')
+    if (input && error) {
+      height = input.scrollHeight + error.scrollHeight;
     }
 
-    return ret;
+    return height.toString() + 'px';
   }
 
-  validatePassword(password) {
-    var ret = [];
-
-    const re = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/
-
-    if (!re.test(String(password))) {
-      ret.push('password must contain at least 6 characters, 1 special character, 1 number, 1 uppercase and 1 lowercase')
+  // found at: https://stackoverflow.com/questions/45661767/javascript-guid-global-unique-identifier-generator-explanation
+  generate_id() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
     }
-
-    return ret;
+    return 'id-' + s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+      s4() + '-' + s4() + s4() + s4();
   }
 }

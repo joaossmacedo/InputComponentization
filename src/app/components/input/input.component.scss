@@ -4,7 +4,8 @@
   width: 90%;
   height: 53px;
   margin: 10px auto;
-
+  transition: max-height 0.5s linear,
+              min-height 0.5s linear;
   .input {
     background: #dddddd;
     border-top-left-radius: 10px;

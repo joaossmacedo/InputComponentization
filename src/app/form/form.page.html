@@ -10,6 +10,7 @@
 </ion-header>
 
 <ion-content>
-  <app-input type="email" (return)="inputReturn($event, 'email')"></app-input>
-  <app-input type="password" (return)="inputReturn($event, 'password')"></app-input>
+  <app-input type="email" placeholder="E-mail" (return)="inputReturn($event, 'email')"></app-input>
+  <app-input type="password" placeholder="Senha" (return)="inputReturn($event, 'password')"></app-input>
+  <app-input type="phone" placeholder="Telefone" (return)="inputReturn($event, 'phone')"></app-input>
 </ion-content>
