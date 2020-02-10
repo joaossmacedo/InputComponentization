@@ -1,4 +1,9 @@
-<div [id]="id" class="input-container" style.max-height="{{getHeight()}}" style.min-height="{{getHeight()}}">
+<div
+  [id]="id"
+  class="input-container"
+  style.max-height="{{ getHeight() }}"
+  style.min-height="{{ getHeight() }}"
+>
   <ion-input
     class="input"
     [type]="getInputType()"
@@ -7,4 +12,7 @@
     [ngClass]="{ 'input-error': hasError() }"
   ></ion-input>
   <div class="error fade-in" *ngIf="hasError()">{{ errors[0] }}</div>
+  <div class="header-placeholder" [style.opacity]="isNotEmpty() ? '0.5' : '0'">
+    {{ placeholder }}
+  </div>
 </div>

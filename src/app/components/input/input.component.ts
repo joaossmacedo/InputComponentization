@@ -31,6 +31,10 @@ export class InputComponent implements OnInit {
     return this.errors && this.errors.length > 0;
   }
 
+  isNotEmpty() {
+    return this.value && this.value.length > 0;
+  }
+
   onInput(event) {
     let errors = [];
 
@@ -50,6 +54,7 @@ export class InputComponent implements OnInit {
 
     this.errors = errors;
 
+    this.value = event.value;
     this.return.emit({
       input: event.value,
       errors: this.errors

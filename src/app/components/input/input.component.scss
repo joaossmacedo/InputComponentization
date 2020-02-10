@@ -4,9 +4,19 @@
   width: 90%;
   height: 53px;
   margin: 10px auto;
+  position: relative;
   transition: max-height 0.5s linear,
               min-height 0.5s linear;
+  .header-placeholder {
+    z-index: 99;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 10px;
+    transition: opacity 0.25s linear;
+  }
   .input {
+    --padding-top: 18px;
     background: #dddddd;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
