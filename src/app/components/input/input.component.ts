@@ -69,6 +69,16 @@ export class InputComponent implements OnInit {
     return height.toString() + 'px';
   }
 
+  getInputType() {
+    let ret = 'text';
+
+    if (this.type === 'password') {
+      ret = 'password';
+    }
+
+    return ret;
+  }
+
   // found at: https://stackoverflow.com/questions/45661767/javascript-guid-global-unique-identifier-generator-explanation
   generate_id() {
     function s4() {

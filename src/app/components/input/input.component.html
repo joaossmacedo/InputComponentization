@@ -1,7 +1,7 @@
 <div [id]="id" class="input-container" style.max-height="{{getHeight()}}" style.min-height="{{getHeight()}}">
   <ion-input
     class="input"
-    type="text"
+    [type]="getInputType()"
     [placeholder]="placeholder"
     (input)="onInput($event.target)"
     [ngClass]="{ 'input-error': hasError() }"
