@@ -40,7 +40,7 @@ export class InputComponent implements OnInit {
 
     // mask
     if (this.type === 'phone') {
-      this.mask.maskPhone(event);
+      this.mask.maskPhoneUS(event);
     }
 
     // validation
