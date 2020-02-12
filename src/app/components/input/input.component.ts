@@ -13,14 +13,13 @@ export class InputComponent implements OnInit {
   @Input() type;
   @Input() label;
   @Input() example;
+  @Input() value = '';
   @Output() return = new EventEmitter();
 
   id = this.generate_id();
   errors;
-  value;
 
   ionViewWillEnter() {
-    this.value = '';
   }
 
   constructor(public validation: ValidationService, public mask: MaskService) { }

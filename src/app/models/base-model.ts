@@ -42,7 +42,7 @@ export class BaseModel {
 
         for (const key of keys) {
             const property = this[key];
-            ret[key] = property.input;
+            ret[key] = property.value;
         }
 
         return ret;
@@ -61,7 +61,7 @@ export class BaseModel {
         const ret = [];
 
         for (const key of keys) {
-            if (this[key].input === '') {
+            if (this[key].value === '') {
                 ret.push(key);
             }
         }

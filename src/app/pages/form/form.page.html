@@ -14,18 +14,21 @@
     type="email"
     label="E-mail"
     example="Ex. john@email.com"
+    [value]="this.form?.email.value"
     (return)="inputReturn($event, 'email')"
   ></app-input>
   <app-input
     type="password"
     label="Password"
     example="Ex. P@ssw0rd"
+    [value]="this.form?.password.value"
     (return)="inputReturn($event, 'password')"
   ></app-input>
   <app-input
     type="phone"
     label="Phone"
     example="Ex. (000)000-0000"
+    [value]="this.form?.phone.value"
     (return)="inputReturn($event, 'phone')"
   ></app-input>
 </ion-content>

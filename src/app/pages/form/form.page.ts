@@ -17,15 +17,18 @@ export class FormPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    // CREATE
     this.form = new FormModel();
+    // EDIT
+    // this.form = new FormModel('email@gmail.com', 'Senha1!', '(000)000-0000');
   }
 
   inputReturn(result, type) {
     this.form[type] = result;
 
-    console.log(this.form);
-    console.log(this.form.hasError());
-    console.log(this.form.emptyProperties());
+    console.log('Form: ', this.form);
+    console.log('Errors: ', this.form.hasError());
+    console.log('Empty: ', this.form.emptyProperties());
   }
 
   reset() {
