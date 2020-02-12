@@ -7,13 +7,13 @@ export class FormModel extends BaseModel {
     password: InputFieldModel;
     phone: InputFieldModel;
 
-    constructor(email: InputFieldModel = new InputFieldModel(),
-                password: InputFieldModel = new InputFieldModel(),
-                phone: InputFieldModel = new InputFieldModel()) {
+    constructor(email: string = '',
+                password: string = '',
+                phone: string = '') {
         super();
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
+        this.email = new InputFieldModel(email);
+        this.password = new InputFieldModel(password);
+        this.phone = new InputFieldModel(phone);
     }
 
 }

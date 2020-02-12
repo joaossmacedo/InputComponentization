@@ -1,6 +1,7 @@
 import { MaskService } from './../../services/mask.service';
 import { ValidationService } from '../../services/validation.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { InputFieldModel } from 'src/app/models/input-field-model';
 
 
 @Component({
@@ -54,12 +55,10 @@ export class InputComponent implements OnInit {
     }
 
     this.errors = errors;
-
     this.value = event.value;
-    this.return.emit({
-      input: event.value,
-      errors: this.errors
-    });
+
+    const ret = new InputFieldModel(this.value, this.errors);
+    this.return.emit(ret);
   }
 
 

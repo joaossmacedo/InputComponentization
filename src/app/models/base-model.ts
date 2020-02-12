@@ -14,12 +14,12 @@ export class BaseModel {
     // checks if one of the object's fields has an error
     // if so returns true
     // otherwise returns false
-    hasError() {
+    hasError(): boolean {
         const keys = (Object.keys(this));
 
         for (const key of keys) {
             const property = this[key];
-            if (property.errors >= 0) {
+            if (property.errors.length > 0) {
                 return true;
             }
         }
@@ -35,7 +35,7 @@ export class BaseModel {
     //      'property3': value3,
     //      'property4': value4
     // }
-    prepare2send() {
+    prepare2send(): object {
         const keys = (Object.keys(this));
 
         const ret = {};

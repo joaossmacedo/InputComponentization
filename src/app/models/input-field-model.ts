@@ -1,15 +1,10 @@
 export class InputFieldModel {
-    input: string;
-    error: [];
+    value: string;
+    errors: string[];
 
     // there should be one InputFieldModal for each input field
-    constructor(response: {input: string, error: []} = null) {
-        if (response) {
-            this.input = response.input;
-            this.error = response.error;
-        } else {
-            this.input = '';
-            this.error = [];
-        }
+    constructor(value: string = '', errors: string[] = []) {
+        this.value = value;
+        this.errors = errors;
     }
 }

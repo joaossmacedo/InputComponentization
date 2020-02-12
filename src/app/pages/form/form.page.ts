@@ -23,6 +23,7 @@ export class FormPage implements OnInit {
   inputReturn(result, type) {
     this.form[type] = result;
 
+    console.log(this.form);
     console.log(this.form.hasError());
     console.log(this.form.emptyProperties());
   }
