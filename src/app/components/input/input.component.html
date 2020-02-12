@@ -7,12 +7,12 @@
   <ion-input
     class="input"
     [type]="getInputType()"
-    [placeholder]="placeholder"
+    [placeholder]="example"
     (input)="onInput($event.target)"
     [ngClass]="{ 'input-error': hasError() }"
   ></ion-input>
   <div class="error fade-in" *ngIf="hasError()">{{ errors[0] }}</div>
-  <div class="header-placeholder" [style.opacity]="isNotEmpty() ? '0.5' : '0'">
-    {{ placeholder }}
+  <div class="header-label">
+    {{ label }}
   </div>
 </div>

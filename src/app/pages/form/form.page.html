@@ -10,7 +10,31 @@
 </ion-header>
 
 <ion-content>
-  <app-input type="email" placeholder="E-mail" (return)="inputReturn($event, 'email')"></app-input>
-  <app-input type="password" placeholder="Password" (return)="inputReturn($event, 'password')"></app-input>
-  <app-input type="phone" placeholder="Phone" (return)="inputReturn($event, 'phone')"></app-input>
+  <app-input
+    type="email"
+    label="E-mail"
+    example="Ex. john@email.com"
+    (return)="inputReturn($event, 'email')"
+  ></app-input>
+  <app-input
+    type="password"
+    label="Password"
+    example="Ex. P@ssw0rd"
+    (return)="inputReturn($event, 'password')"
+  ></app-input>
+  <app-input
+    type="phone"
+    label="Phone"
+    example="Ex. (000)000-0000"
+    (return)="inputReturn($event, 'phone')"
+  ></app-input>
 </ion-content>
+
+<ion-footer class="footer">
+  <!-- <ion-button color="danger" class="btn" fill="outline" (click)="reset()">
+    Reset
+  </ion-button> -->
+  <ion-button color="primary" class="btn" (click)="submit()">
+    Submit
+  </ion-button>
+</ion-footer>

@@ -10,7 +10,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class InputComponent implements OnInit {
   @Input() type;
-  @Input() placeholder;
+  @Input() label;
+  @Input() example;
   @Output() return = new EventEmitter();
 
   id = this.generate_id();
