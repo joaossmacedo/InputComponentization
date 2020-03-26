@@ -1,5 +1,8 @@
 import { InputFieldModel } from './input-field-model';
 
+const INVALID_FORM_MODEL = 'Invalid Form Model. Form Models should only contain ' +
+                           'properties of type InputFieldModel or BaseFormModel.';
+
 export class BaseModel {
     // this is the base model
     //
@@ -14,12 +17,25 @@ export class BaseModel {
     // checks if one of the object's fields has an error
     // if so returns true
     // otherwise returns false
-    hasError(): boolean {
+    hasError(nonRequiredParam: Array<string> = []): boolean {
         const keys = (Object.keys(this));
 
         for (const key of keys) {
-            const property = this[key];
-            if (property.errors.length > 0) {
+            const field = this[key];
+
+            let hasError = false;
+            if (field instanceof InputFieldModel) {
+                if (field.errors.length > 0 ||
+                    (field.value === '' && !nonRequiredParam.includes(key))) {
+                    hasError = true;
+                }
+            } else if (field instanceof BaseModel) {
+                hasError = field.hasError(nonRequiredParam);
+            } else {
+                throw new Error(INVALID_FORM_MODEL);
+            }
+
+            if (hasError) {
                 return true;
             }
         }
@@ -35,14 +51,25 @@ export class BaseModel {
     //      'property3': value3,
     //      'property4': value4
     // }
-    prepare2send(): object {
+    prepare2send(propertiesIgnored: Array<string> = []): object {
         const keys = (Object.keys(this));
 
         const ret = {};
 
         for (const key of keys) {
-            const property = this[key];
-            ret[key] = property.value;
+            if (propertiesIgnored.includes(key)) {
+                continue;
+            }
+
+            const field = this[key];
+
+            if (field instanceof InputFieldModel) {
+                ret[key] = field.value;
+            } else if (field instanceof BaseModel) {
+                ret[key] = field.prepare2send(propertiesIgnored);
+            } else {
+                throw new Error(INVALID_FORM_MODEL);
+            }
         }
 
         return ret;
@@ -55,14 +82,26 @@ export class BaseModel {
     //
     // Ex:
     // ["name", "phone"]
-    emptyProperties(): string[] {
+    emptyProperties(propertiesIgnored: Array<string> = []): string[] {
         const keys = (Object.keys(this));
 
-        const ret = [];
+        let ret = [];
 
         for (const key of keys) {
-            if (this[key].value === '') {
-                ret.push(key);
+            if (propertiesIgnored.includes(key)) {
+                continue;
+            }
+
+            const field = this[key];
+
+            if (field instanceof InputFieldModel) {
+                if (this[key].value === '') {
+                    ret.push(key);
+                }
+            } else if (field instanceof BaseModel) {
+                ret = ret.concat(field.emptyProperties(propertiesIgnored));
+            } else {
+                throw new Error(INVALID_FORM_MODEL);
             }
         }
 
