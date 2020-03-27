@@ -23,4 +23,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     console.log(type + ': ' + obj);
     this.form[type] = obj;
   }
+
+  submit() {
+    console.log(this.form.prepare2send());
+  }
 }

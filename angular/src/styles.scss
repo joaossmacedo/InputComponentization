@@ -4,3 +4,28 @@
 app-input {
     width: 100%;
 }
+
+// got the solution from:
+// https://github.com/angular/components/issues/4580#issuecomment-553343474
+mat-form-field.ng-invalid.ng-touched {
+    animation: bigger-error;
+    animation-duration: 0.3s;
+    margin-bottom: 17px;
+}
+
+@keyframes bigger-error {
+    from {margin-bottom: 0;}
+    to {margin-bottom: 17px;}
+}
+
+mat-form-field.ng-valid.ng-touched {
+    animation: smaller-error;
+    animation-duration: 0.3s;
+    margin-bottom: 0px;
+}
+
+@keyframes smaller-error {
+    from {margin-bottom: 17px;}
+    to {margin-bottom: 0;}
+}
+  
