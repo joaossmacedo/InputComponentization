@@ -141,6 +141,8 @@ export class InputComponent implements OnInit, OnChanges {
 
     const passwordType = ['password'];
     const emailType = ['email'];
+    // only add numbers if they have no mask
+    // Ex: don't add phone here
     const numbersType = [];
 
     if (passwordType.includes(this.type) && !this.showPassword) {
