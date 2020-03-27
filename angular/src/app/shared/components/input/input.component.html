@@ -1,0 +1,15 @@
+<mat-form-field class="example-full-width" [id]="id">
+    <mat-label>{{ label }}</mat-label>
+    <input matInput
+           (input)="keyPress($event.target)"
+           [formControl]="control"
+           [attr.maxlength]="getMaxLength()"
+           [type]="getType()"
+           [placeholder]="placeholder"
+           [required]="required"
+    >
+    <mat-icon *ngIf="type == 'password'" matSuffix (click)="showPassword = !showPassword">
+        {{showPassword ? 'visibility' : 'visibility_off'}}
+    </mat-icon>
+    <mat-error *ngIf="control.invalid">{{getErrorMessage()}}</mat-error>
+</mat-form-field>
