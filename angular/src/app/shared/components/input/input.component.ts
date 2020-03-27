@@ -165,7 +165,7 @@ export class InputComponent implements OnInit, OnChanges {
       invalidEmailFormat: 'Invalid email format',
       invalidPhoneFormat: 'Invalid phone format',
       invalidPasswordFormat: 'Password should contain at least 6 characters of which there shall be at least' +
-                             ' 1 uppercase letter , 1 lowecase letter, 1 number and 1 special character ',
+                             ' 1 uppercase letter , 1 lowercase letter, 1 number and 1 special character ',
       invalidPasswordConfirmation: 'Passwords don\'t match',
       invalidCPFFormat: 'Invalid CPF format',
       invalidCNPJFormat: 'Invalid CNPJ format'
@@ -182,9 +182,9 @@ export class InputComponent implements OnInit, OnChanges {
       case 'invalidPasswordChar':
         const fullError = this.control.getError(error);
         const invalidChar = fullError.value;
-        return 'Caractere "' + invalidChar + '" é inválido';
+        return 'Character "' + invalidChar + '" is invalid';
       default:
-        return 'Campo inválido';
+        return 'Invalid field';
     }
   }
 
