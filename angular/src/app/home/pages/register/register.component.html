@@ -2,7 +2,7 @@
     <p>register works!</p>
     <app-input type='email' label='E-mail' placeholder='Ex: email@email.com'
                (emitter)="inputReturn($event, 'email')">
-    </app-input>
+    </div>
     <app-input type='phone' label='Phone' placeholder='Ex: (123) 456-7890'
                (emitter)="inputReturn($event, 'phone')">
     </app-input>
@@ -14,6 +14,6 @@
     </app-input>
     <app-input type='password' label='Password confirmation' placeholder='Passw0rd!'
                (emitter)="inputReturn($event, 'password_confirmation')"
-               [confirmValue]="form?.password">
+               [confirmValue]="form ? form.password.value : ''">
     </app-input>
 </div>
