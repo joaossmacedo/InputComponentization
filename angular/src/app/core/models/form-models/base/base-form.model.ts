@@ -3,7 +3,7 @@ import { InputFieldModel } from './input-field.model';
 const INVALID_FORM_MODEL = 'Invalid Form Model. Form Models should only contain ' +
                            'properties of type InputFieldModel or BaseFormModel.';
 
-export class BaseFormModel {
+export abstract class BaseFormModel {
     // this is the base model
     //
     // if you create a new model it should extend from this one
@@ -12,6 +12,16 @@ export class BaseFormModel {
     // the models that inherit from this base model should have only properties from type "InputFieldModal"
     // if you DON'T do this THERE WILL BE ERRORS
     constructor() {
+    }
+
+    private static isFieldValid(field): boolean {
+        if (!(field instanceof InputFieldModel ||
+              field instanceof BaseFormModel ||
+              field instanceof Array)) {
+            return false;
+        }
+
+        return true;
     }
 
     // checks if one of the object's fields has an error
@@ -23,16 +33,18 @@ export class BaseFormModel {
         for (const key of keys) {
             const field = this[key];
 
-            let hasError = false;
-            if (field instanceof InputFieldModel) {
-                if (field.errors.length > 0 ||
-                    (field.value === '' && !nonRequiredParam.includes(key))) {
-                    hasError = true;
-                }
-            } else if (field instanceof BaseFormModel) {
-                hasError = field.hasError(nonRequiredParam);
-            } else {
+            if (BaseFormModel.isFieldValid(field)) {
                 throw new Error(INVALID_FORM_MODEL);
+            }
+
+            let hasError = false;
+            if (field instanceof BaseFormModel) {
+                hasError = field.hasError(nonRequiredParam);
+            } else if (field instanceof Array) {
+                console.log('Not handling arrays yet');
+            } else if (field.errors.length > 0 ||
+                       (field.value === '' && !nonRequiredParam.includes(key))) {
+                hasError = true;
             }
 
             if (hasError) {
@@ -63,12 +75,16 @@ export class BaseFormModel {
 
             const field = this[key];
 
-            if (field instanceof InputFieldModel) {
-                ret[key] = field.value;
-            } else if (field instanceof BaseFormModel) {
-                ret[key] = field.prepare2send(propertiesIgnored);
-            } else {
+            if (BaseFormModel.isFieldValid(field)) {
                 throw new Error(INVALID_FORM_MODEL);
+            }
+
+            if (field instanceof BaseFormModel) {
+                ret[key] = field.prepare2send(propertiesIgnored);
+            } else if (field instanceof Array) {
+                console.log('Not handling arrays yet');
+            } else {
+                ret[key] = field.value;
             }
         }
 
@@ -94,14 +110,16 @@ export class BaseFormModel {
 
             const field = this[key];
 
-            if (field instanceof InputFieldModel) {
-                if (this[key].value === '') {
-                    ret.push(key);
-                }
-            } else if (field instanceof BaseFormModel) {
-                ret = ret.concat(field.emptyProperties(propertiesIgnored));
-            } else {
+            if (BaseFormModel.isFieldValid(field)) {
                 throw new Error(INVALID_FORM_MODEL);
+            }
+
+            if (field instanceof BaseFormModel) {
+                ret = ret.concat(field.emptyProperties(propertiesIgnored));
+            } else if (field instanceof Array) {
+                console.log('Not handling arrays yet');
+            } else if (this[key].value === '') {
+                ret.push(key);
             }
         }
 
