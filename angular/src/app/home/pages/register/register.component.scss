@@ -7,3 +7,36 @@
     align-items: center;
     margin: auto;
 }
+
+.skill-input-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.languages-input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    .language-input-container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;    
+    }
+}
+
+.remove-button {
+    padding: 5px 10px;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    border-radius: 5px;
+    color: white;
+    background-color: #f44336;
+    cursor: pointer;
+}

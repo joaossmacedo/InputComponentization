@@ -1,5 +1,5 @@
 <div class="body">
-    <p>register works!</p>
+    <h2>Personal Info</h2>
     <app-input type='email' label='E-mail' placeholder='Ex: email@email.com'
                (emitter)="inputReturn($event, 'email')">
     </app-input>
@@ -9,13 +9,57 @@
     <app-input type='city' label='City' placeholder='Ex: San Francisco'
                (emitter)="inputReturn($event, 'city')">
     </app-input>
-    <app-input type='password' label='Password' placeholder='Passw0rd!'
+    <app-input type='password' label='Password' placeholder='Ex: Passw0rd!'
                (emitter)="inputReturn($event, 'password')">
     </app-input>
-    <app-input type='password' label='Password confirmation' placeholder='Passw0rd!'
-               (emitter)="inputReturn($event, 'password_confirmation')"
+    <app-input type='password' label='Password confirmation' placeholder='Ex: Passw0rd!'
+               (emitter)="inputReturn($event, 'passwordConfirmation')"
                [confirmValue]="form ? form.password.value : ''">
     </app-input>
 
-    <button mat-raised-button color='primary' (click)='submit()'>Submit</button>
+    <h2>Skills</h2>
+    <div class="skill-input-container" *ngFor='let skill of form?.skills; let i = index;'>
+        <app-input type='skill' label='Skill' placeholder='Ex: Angular'
+                   (emitter)="inputReturn($event, 'skills', i)">
+        </app-input>
+        <div class="remove-button" (click)="removeSkill(i)">
+            Remove
+        </div>
+    </div>
+    <button mat-raised-button style="margin-bottom: 10px;" color='accent' (click)='addNewSkill()'>Add new skill</button>
+    
+    <h2>Languages</h2>
+    <div class="languages-input-container" *ngFor='let languages of form?.languages; let i = index;'>
+        <div class="language-input-container">
+            <app-input type='language' label='Language' placeholder='Ex: English'
+                    (emitter)="inputReturn($event, 'languages', i, 'name')">
+            </app-input>
+            <div class="remove-button" (click)="removeLanguages(i)">
+                Remove
+            </div>
+        </div>
+        <div class="language-input-container">
+            <app-input type='language-level' label='Speaking Level(from: 1 to 5)' placeholder='Ex: 3'
+                       (emitter)="inputReturn($event, 'languages', i, 'speaking')">
+            </app-input>
+        </div>
+        <div class="language-input-container">
+            <app-input type='language-level' label='Writing Level(from: 1 to 5)' placeholder='Ex: 3'
+                       (emitter)="inputReturn($event, 'languages', i, 'writing')">
+            </app-input>
+        </div>
+        <div class="language-input-container">
+            <app-input type='language-level' label='Reading Level(from: 1 to 5)' placeholder='Ex: 3'
+                       (emitter)="inputReturn($event, 'languages', i, 'reading')">
+            </app-input>
+        </div>
+        <div class="language-input-container">
+            <app-input type='language-level' label='Listening Level(from: 1 to 5)' placeholder='Ex: 3'
+                       (emitter)="inputReturn($event, 'languages', i, 'listening')">
+            </app-input>
+        </div>
+    </div>
+    <button mat-raised-button style="margin-bottom: 10px;" color='accent' (click)='addNewLanguage()'>Add new language</button>
+
+    <button mat-raised-button color='primary' [disabled]='this.form?.hasError()' (click)='submit()'>Submit</button>
 </div>

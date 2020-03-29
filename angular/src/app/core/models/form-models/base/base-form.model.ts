@@ -1,7 +1,17 @@
 import { InputFieldModel } from './input-field.model';
 
 const INVALID_FORM_MODEL = 'Invalid Form Model. Form Models should only contain ' +
-                           'properties of type InputFieldModel or BaseFormModel.';
+                           'properties of type InputFieldModel, Array or BaseFormModel.';
+
+// tslint:disable-next-line: class-name
+interface PREPARE_TO_SEND_RETURN {
+    [form: string]: string | PREPARE_TO_SEND_RETURN |
+                    Array<string | PREPARE_TO_SEND_RETURN>;
+}
+// tslint:disable-next-line: class-name
+type VALID_TYPES = InputFieldModel | BaseFormModel | Array<VALID_TYPES>;
+
+
 
 export abstract class BaseFormModel {
     // this is the base model
@@ -15,13 +25,18 @@ export abstract class BaseFormModel {
     }
 
     private static isFieldValid(field): boolean {
-        if (!(field instanceof InputFieldModel ||
-              field instanceof BaseFormModel ||
-              field instanceof Array)) {
-            return false;
+        // console.log(field);
+        // console.log('type checker');
+        // console.log('isInput: ' + (field.constructor === InputFieldModel));
+        // console.log('isForm: ' + (field instanceof BaseFormModel));
+        // console.log('isArray: ' + (field instanceof Array));
+        if (field instanceof InputFieldModel ||
+            field instanceof BaseFormModel ||
+            field instanceof Array) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     // checks if one of the object's fields has an error
@@ -33,7 +48,7 @@ export abstract class BaseFormModel {
         for (const key of keys) {
             const field = this[key];
 
-            if (BaseFormModel.isFieldValid(field)) {
+            if (!BaseFormModel.isFieldValid(field)) {
                 throw new Error(INVALID_FORM_MODEL);
             }
 
@@ -41,10 +56,31 @@ export abstract class BaseFormModel {
             if (field instanceof BaseFormModel) {
                 hasError = field.hasError(nonRequiredParam);
             } else if (field instanceof Array) {
-                console.log('Not handling arrays yet');
+                hasError = this.arrayHasError(field, nonRequiredParam);
             } else if (field.errors.length > 0 ||
                        (field.value === '' && !nonRequiredParam.includes(key))) {
                 hasError = true;
+            }
+
+            if (hasError) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private arrayHasError(fields: Array<any>, nonRequiredParam: Array<string> = []): boolean {
+        console.log('checking if array has error');
+        for (const field of fields) {
+            let hasError = false;
+            if (field instanceof BaseFormModel) {
+                console.log('BaseFormModel');
+                hasError = field.arrayHasError(nonRequiredParam);
+            } else if (field instanceof Array) {
+                hasError = this.arrayHasError(field, nonRequiredParam);
+            } else if (field.hasOwnProperty('value') && field.hasOwnProperty('errors')) {
+                hasError = field.errors.length > 0 || field.value === '';
             }
 
             if (hasError) {
@@ -63,10 +99,10 @@ export abstract class BaseFormModel {
     //      'property3': value3,
     //      'property4': value4
     // }
-    prepare2send(propertiesIgnored: Array<string> = []): object {
+    prepare2send(flat = false, propertiesIgnored: Array<string> = []): PREPARE_TO_SEND_RETURN {
         const keys = (Object.keys(this));
 
-        const ret = {};
+        let ret = {};
 
         for (const key of keys) {
             if (propertiesIgnored.includes(key)) {
@@ -75,20 +111,55 @@ export abstract class BaseFormModel {
 
             const field = this[key];
 
-            if (BaseFormModel.isFieldValid(field)) {
+            if (!BaseFormModel.isFieldValid(field)) {
                 throw new Error(INVALID_FORM_MODEL);
             }
 
             if (field instanceof BaseFormModel) {
-                ret[key] = field.prepare2send(propertiesIgnored);
+                const returnedValue = field.prepare2send(flat, propertiesIgnored);
+
+                if (flat) {
+                    // merge the objects
+                    ret = {...ret, ...returnedValue};
+                } else {
+                    ret[key] = returnedValue;
+                }
+
             } else if (field instanceof Array) {
-                console.log('Not handling arrays yet');
+                if (field.length > 0) {
+                    const array = this.prepareArray2send(field, flat, propertiesIgnored);
+                    ret[key] = array === null ? field : array;
+                }
             } else {
                 ret[key] = field.value;
             }
         }
 
         return ret;
+    }
+
+    private prepareArray2send(fields: Array<VALID_TYPES>,
+                              flat: boolean, propertiesIgnored: Array<string>):
+                              Array<VALID_TYPES> | null {
+        const array = [];
+
+        for (const field of fields) {
+            if (field instanceof BaseFormModel) {
+                const returnedValue = field.prepare2send(flat, propertiesIgnored);
+                array.push(returnedValue);
+            } else if (field instanceof Array) {
+                const returnedValue = this.prepareArray2send(field, flat, propertiesIgnored);
+                array.push(returnedValue);
+            } else if (field.hasOwnProperty('value')) {
+                // for some reason when field is InputFieldModel instanceof doesn't work
+                // tslint:disable-next-line: no-string-literal
+                array.push(field['value']);
+            } else {
+                return null;
+            }
+        }
+
+        return array;
     }
 
     // returns a list of the name of all properties that have input === ''
@@ -98,7 +169,7 @@ export abstract class BaseFormModel {
     //
     // Ex:
     // ["name", "phone"]
-    emptyProperties(propertiesIgnored: Array<string> = []): string[] {
+    emptyProperties(propertiesIgnored: Array<string> = []): Array<string> {
         const keys = (Object.keys(this));
 
         let ret = [];
@@ -110,7 +181,7 @@ export abstract class BaseFormModel {
 
             const field = this[key];
 
-            if (BaseFormModel.isFieldValid(field)) {
+            if (!BaseFormModel.isFieldValid(field)) {
                 throw new Error(INVALID_FORM_MODEL);
             }
 
@@ -124,5 +195,42 @@ export abstract class BaseFormModel {
         }
 
         return ret;
+    }
+
+    // returns which properties belong to each object
+    // Ex:
+    // {
+    //      'stundent': ['name', 'phone', 'city'],
+    //      'curriculum_vitaes': ['summary', 'whatelse', 'link_linkedin'],
+    //      'cv_degrees': ['course', 'school', 'course_type'],
+    //      'cv_awards': ['title', 'desc']
+    // }
+    getPropertiesByForm(): { [form: string]: Array<string> } {
+        function auxGetPropertiesByForm(target: BaseFormModel, name: string) {
+            const keys = (Object.keys(target));
+
+            let ret = {};
+            ret[name] = [];
+
+            for (const key of keys) {
+                const field = target[key];
+
+                if (!BaseFormModel.isFieldValid(field)) {
+                    throw new Error(INVALID_FORM_MODEL);
+                }
+
+                if (field instanceof BaseFormModel) {
+                    const returnedValue = auxGetPropertiesByForm(field, key);
+                    // merge the objects
+                    ret = {...ret, ...returnedValue};
+                } else if (field instanceof InputFieldModel ||
+                           field instanceof Array) {
+                    ret[name].push(key);
+                }
+            }
+
+            return ret;
+        }
+        return auxGetPropertiesByForm(this, 'this');
     }
 }
