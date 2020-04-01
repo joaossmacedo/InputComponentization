@@ -25,11 +25,6 @@ export abstract class BaseFormModel {
     }
 
     private static isFieldValid(field): boolean {
-        // console.log(field);
-        // console.log('type checker');
-        // console.log('isInput: ' + (field.constructor === InputFieldModel));
-        // console.log('isForm: ' + (field instanceof BaseFormModel));
-        // console.log('isArray: ' + (field instanceof Array));
         if (field instanceof InputFieldModel ||
             field instanceof BaseFormModel ||
             field instanceof Array) {
@@ -39,14 +34,11 @@ export abstract class BaseFormModel {
         return false;
     }
 
-    // checks if one of the object's fields has an error
-    // if so returns true
-    // otherwise returns false
-    hasError(nonRequiredParam: Array<string> = []): boolean {
-        const keys = (Object.keys(this));
+    private static modelHasError(model: BaseFormModel, nonRequiredParam: Array<string> = []): boolean {
+        const keys = (Object.keys(model));
 
         for (const key of keys) {
-            const field = this[key];
+            const field = model[key];
 
             if (!BaseFormModel.isFieldValid(field)) {
                 throw new Error(INVALID_FORM_MODEL);
@@ -54,7 +46,7 @@ export abstract class BaseFormModel {
 
             let hasError = false;
             if (field instanceof BaseFormModel) {
-                hasError = field.hasError(nonRequiredParam);
+                hasError = this.modelHasError(field, nonRequiredParam);
             } else if (field instanceof Array) {
                 hasError = this.arrayHasError(field, nonRequiredParam);
             } else if (field.errors.length > 0 ||
@@ -70,13 +62,12 @@ export abstract class BaseFormModel {
         return false;
     }
 
-    private arrayHasError(fields: Array<any>, nonRequiredParam: Array<string> = []): boolean {
-        console.log('checking if array has error');
+    private static arrayHasError(fields: Array<any>, nonRequiredParam: Array<string> = []): boolean {
         for (const field of fields) {
             let hasError = false;
+
             if (field instanceof BaseFormModel) {
-                console.log('BaseFormModel');
-                hasError = field.arrayHasError(nonRequiredParam);
+                hasError = this.modelHasError(field, nonRequiredParam);
             } else if (field instanceof Array) {
                 hasError = this.arrayHasError(field, nonRequiredParam);
             } else if (field.hasOwnProperty('value') && field.hasOwnProperty('errors')) {
@@ -91,16 +82,8 @@ export abstract class BaseFormModel {
         return false;
     }
 
-    // returns an object ready to be sent to the backend
-    // Ex:
-    // {
-    //      'property1': value1,
-    //      'property2': value2,
-    //      'property3': value3,
-    //      'property4': value4
-    // }
-    prepare2send(flat = false, propertiesIgnored: Array<string> = []): PREPARE_TO_SEND_RETURN {
-        const keys = (Object.keys(this));
+    private static prepareModel2send(model: BaseFormModel, flat = false, propertiesIgnored: Array<string> = []): PREPARE_TO_SEND_RETURN {
+        const keys = (Object.keys(model));
 
         let ret = {};
 
@@ -109,14 +92,14 @@ export abstract class BaseFormModel {
                 continue;
             }
 
-            const field = this[key];
+            const field = model[key];
 
             if (!BaseFormModel.isFieldValid(field)) {
                 throw new Error(INVALID_FORM_MODEL);
             }
 
             if (field instanceof BaseFormModel) {
-                const returnedValue = field.prepare2send(flat, propertiesIgnored);
+                const returnedValue = this.prepareModel2send(field, flat, propertiesIgnored);
 
                 if (flat) {
                     // merge the objects
@@ -138,14 +121,14 @@ export abstract class BaseFormModel {
         return ret;
     }
 
-    private prepareArray2send(fields: Array<VALID_TYPES>,
-                              flat: boolean, propertiesIgnored: Array<string>):
-                              Array<VALID_TYPES> | null {
+    private static prepareArray2send(fields: Array<VALID_TYPES>,
+                                     flat: boolean, propertiesIgnored: Array<string>):
+                                     Array<VALID_TYPES> | null {
         const array = [];
 
         for (const field of fields) {
             if (field instanceof BaseFormModel) {
-                const returnedValue = field.prepare2send(flat, propertiesIgnored);
+                const returnedValue = this.prepareModel2send(field, flat, propertiesIgnored);
                 array.push(returnedValue);
             } else if (field instanceof Array) {
                 const returnedValue = this.prepareArray2send(field, flat, propertiesIgnored);
@@ -160,6 +143,26 @@ export abstract class BaseFormModel {
         }
 
         return array;
+    }
+
+    // checks if one of the object's fields has an error
+    // if so returns true
+    // otherwise returns false
+    hasError(nonRequiredParam: Array<string> = []): boolean {
+        return BaseFormModel.modelHasError(this, nonRequiredParam);
+    }
+
+
+    // returns an object ready to be sent to the backend
+    // Ex:
+    // {
+    //      'property1': value1,
+    //      'property2': value2,
+    //      'property3': value3,
+    //      'property4': value4
+    // }
+    prepare2send(flat = false, propertiesIgnored: Array<string> = []) {
+        return BaseFormModel.prepareModel2send(this, flat, propertiesIgnored)
     }
 
     // returns a list of the name of all properties that have input === ''

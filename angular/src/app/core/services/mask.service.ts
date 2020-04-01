@@ -97,4 +97,20 @@ export class MaskService {
 
     return value;
   }
+
+  maskLanguageLevel(value: string): string {
+    value = value.replace(/[^0-9]/g, '');
+
+    const numericalValue = Number(value);
+
+    if (numericalValue < 1 || numericalValue > 5) {
+      if (value.length > 1) {
+        value = value.substr(0, 1);
+      } else {
+        value = '';
+      }
+    }
+
+    return value;
+  }
 }

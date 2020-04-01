@@ -1,5 +1,5 @@
 import { InputFieldModel } from './../../../../../../ionic/src/app/models/input-field-model';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { RegisterFormModel } from '../../models/register-form.model';
 import { LanguageFormModel } from '../../models/language-form.model';
 
@@ -8,7 +8,7 @@ import { LanguageFormModel } from '../../models/language-form.model';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit, AfterViewInit {
+export class RegisterComponent implements OnInit, AfterContentInit {
   form: RegisterFormModel;
 
   constructor() { }
@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void {
+  ngAfterContentInit(): void {
     this.form = new RegisterFormModel();
   }
 
@@ -35,6 +35,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
 
   submit() {
     console.log(this.form.prepare2send());
+    console.log(this.form.getPropertiesByForm());
   }
 
   addNewSkill() {

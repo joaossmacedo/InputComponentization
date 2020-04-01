@@ -122,4 +122,23 @@ export class ValidationService {
       return invalidPassword ? { invalidPasswordConfirmation: { value: control.value } } : null;
     };
   }
+
+  validateLanguageLevel(): ValidatorFn {
+    return (control: AbstractControl): RETURN_TYPE | null => {
+      let invalidLanguageLevel = false;
+
+      const validLanguageLevelRegex = /^(\d){1}$/;
+      invalidLanguageLevel = !validLanguageLevelRegex.test(control.value);
+
+      const value = Number(control.value);
+
+      if (value < 1 || value > 5) {
+        invalidLanguageLevel = true;
+      }
+
+      return invalidLanguageLevel
+        ? { invalidLanguageLevel: { value: control.value } }
+        : null;
+    };
+  }
 }

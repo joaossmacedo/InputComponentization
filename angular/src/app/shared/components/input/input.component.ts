@@ -59,6 +59,9 @@ export class InputComponent implements OnInit, OnChanges {
       case 'cnpj':
         validators.push(this.validation.validateCNPJFormat());
         break;
+      case 'language-level':
+        validators.push(this.validation.validateLanguageLevel());
+        break;
       default:
         break;
     }
@@ -103,6 +106,9 @@ export class InputComponent implements OnInit, OnChanges {
         break;
       case 'cnpj':
         value = this.mask.maskCNPJ(value);
+        break;
+      case 'language-level':
+        value = this.mask.maskLanguageLevel(value);
         break;
       default:
         break;
@@ -170,7 +176,8 @@ export class InputComponent implements OnInit, OnChanges {
                              ' 1 uppercase letter , 1 lowercase letter, 1 number and 1 special character ',
       invalidPasswordConfirmation: 'Passwords don\'t match',
       invalidCPFFormat: 'Invalid CPF format',
-      invalidCNPJFormat: 'Invalid CNPJ format'
+      invalidCNPJFormat: 'Invalid CNPJ format',
+      invalidLanguageSkill: 'Language level must be between 1 and 5'
     };
 
     const error = this.errors[0];

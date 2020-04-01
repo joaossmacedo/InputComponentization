@@ -1,18 +1,23 @@
 <div class="body">
     <h2>Personal Info</h2>
     <app-input type='email' label='E-mail' placeholder='Ex: email@email.com'
+               [initialValue]='form.email.value'
                (emitter)="inputReturn($event, 'email')">
     </app-input>
     <app-input type='phone' label='Phone' placeholder='Ex: (123) 456-7890'
+               [initialValue]='form.phone.value'
                (emitter)="inputReturn($event, 'phone')">
     </app-input>
     <app-input type='city' label='City' placeholder='Ex: San Francisco'
+               [initialValue]='form.city.value'
                (emitter)="inputReturn($event, 'city')">
     </app-input>
     <app-input type='password' label='Password' placeholder='Ex: Passw0rd!'
+               [initialValue]='form.password.value'
                (emitter)="inputReturn($event, 'password')">
     </app-input>
     <app-input type='password' label='Password confirmation' placeholder='Ex: Passw0rd!'
+               [initialValue]='form.passwordConfirmation.value'
                (emitter)="inputReturn($event, 'passwordConfirmation')"
                [confirmValue]="form ? form.password.value : ''">
     </app-input>
@@ -32,7 +37,7 @@
     <div class="languages-input-container" *ngFor='let languages of form?.languages; let i = index;'>
         <div class="language-input-container">
             <app-input type='language' label='Language' placeholder='Ex: English'
-                    (emitter)="inputReturn($event, 'languages', i, 'name')">
+                       (emitter)="inputReturn($event, 'languages', i, 'name')">
             </app-input>
             <div class="remove-button" (click)="removeLanguages(i)">
                 Remove
