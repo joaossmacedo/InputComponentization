@@ -14,12 +14,14 @@ type VALID_TYPES = InputFieldModel | BaseFormModel | Array<VALID_TYPES>;
 
 
 export abstract class BaseFormModel {
-    // this is the base model
+    // this is the base form model
     //
-    // if you create a new model it should extend from this one
-    // if you do so you will be able to use methods common to all models
+    // if you create a new form model it should extend from this one
+    // if you do so you will be able to use methods common to all form models
+    // such as hasError and prepare2send
     //
-    // the models that inherit from this base model should have only properties from type "InputFieldModal"
+    // the form models that inherit from this base model should have only properties from types
+    // "InputFieldModel", "BaseFormModel" and "Arrays" of said types
     // if you DON'T do this THERE WILL BE ERRORS
     constructor() {
     }
@@ -134,7 +136,7 @@ export abstract class BaseFormModel {
                 const returnedValue = this.prepareArray2send(field, flat, propertiesIgnored);
                 array.push(returnedValue);
             } else if (field.hasOwnProperty('value')) {
-                // for some reason when field is InputFieldModel instanceof doesn't work
+                // for some reason when field is InputFieldModel instanceof doesn't work in this function
                 // tslint:disable-next-line: no-string-literal
                 array.push(field['value']);
             } else {
@@ -162,7 +164,7 @@ export abstract class BaseFormModel {
     //      'property4': value4
     // }
     prepare2send(flat = false, propertiesIgnored: Array<string> = []) {
-        return BaseFormModel.prepareModel2send(this, flat, propertiesIgnored)
+        return BaseFormModel.prepareModel2send(this, flat, propertiesIgnored);
     }
 
     // returns a list of the name of all properties that have input === ''
