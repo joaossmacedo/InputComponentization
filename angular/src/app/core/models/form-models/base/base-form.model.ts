@@ -199,41 +199,4 @@ export abstract class BaseFormModel {
 
         return ret;
     }
-
-    // returns which properties belong to each object
-    // Ex:
-    // {
-    //      'stundent': ['name', 'phone', 'city'],
-    //      'curriculum_vitaes': ['summary', 'whatelse', 'link_linkedin'],
-    //      'cv_degrees': ['course', 'school', 'course_type'],
-    //      'cv_awards': ['title', 'desc']
-    // }
-    getPropertiesByForm(): { [form: string]: Array<string> } {
-        function auxGetPropertiesByForm(target: BaseFormModel, name: string) {
-            const keys = (Object.keys(target));
-
-            let ret = {};
-            ret[name] = [];
-
-            for (const key of keys) {
-                const field = target[key];
-
-                if (!BaseFormModel.isFieldValid(field)) {
-                    throw new Error(INVALID_FORM_MODEL);
-                }
-
-                if (field instanceof BaseFormModel) {
-                    const returnedValue = auxGetPropertiesByForm(field, key);
-                    // merge the objects
-                    ret = {...ret, ...returnedValue};
-                } else if (field instanceof InputFieldModel ||
-                           field instanceof Array) {
-                    ret[name].push(key);
-                }
-            }
-
-            return ret;
-        }
-        return auxGetPropertiesByForm(this, 'this');
-    }
 }

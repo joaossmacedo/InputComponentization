@@ -21,11 +21,17 @@
                (emitter)="inputReturn($event, 'passwordConfirmation')"
                [confirmValue]="form ? form.password.value : ''">
     </app-input>
-
+    <h2>Company Info</h2>
+    <app-input type='company-name' label='Company Name' placeholder='Ex: Apple'
+               (emitter)="inputReturn($event, 'company', ['name'])">
+    </app-input>
+    <app-input type='company-area' label='Company Area' placeholder='Ex: Software Engineering'
+               (emitter)="inputReturn($event, 'company', ['area'])">
+    </app-input>
     <h2>Skills</h2>
     <div class="skill-input-container" *ngFor='let skill of form?.skills; let i = index;'>
         <app-input type='skill' label='Skill' placeholder='Ex: Angular'
-                   (emitter)="inputReturn($event, 'skills', i)">
+                   (emitter)="inputReturn($event, 'skills', [i])">
         </app-input>
         <div class="remove-button" (click)="removeSkill(i)">
             Remove
@@ -37,7 +43,7 @@
     <div class="languages-input-container" *ngFor='let languages of form?.languages; let i = index;'>
         <div class="language-input-container">
             <app-input type='language' label='Language' placeholder='Ex: English'
-                       (emitter)="inputReturn($event, 'languages', i, 'name')">
+                       (emitter)="inputReturn($event, 'languages', [i, 'name'])">
             </app-input>
             <div class="remove-button" (click)="removeLanguages(i)">
                 Remove
@@ -45,22 +51,22 @@
         </div>
         <div class="language-input-container">
             <app-input type='language-level' label='Speaking Level(from: 1 to 5)' placeholder='Ex: 3'
-                       (emitter)="inputReturn($event, 'languages', i, 'speaking')">
+                       (emitter)="inputReturn($event, 'languages', [i, 'speaking'])">
             </app-input>
         </div>
         <div class="language-input-container">
             <app-input type='language-level' label='Writing Level(from: 1 to 5)' placeholder='Ex: 3'
-                       (emitter)="inputReturn($event, 'languages', i, 'writing')">
+                       (emitter)="inputReturn($event, 'languages', [i, 'writing'])">
             </app-input>
         </div>
         <div class="language-input-container">
             <app-input type='language-level' label='Reading Level(from: 1 to 5)' placeholder='Ex: 3'
-                       (emitter)="inputReturn($event, 'languages', i, 'reading')">
+                       (emitter)="inputReturn($event, 'languages', [i, 'reading'])">
             </app-input>
         </div>
         <div class="language-input-container">
             <app-input type='language-level' label='Listening Level(from: 1 to 5)' placeholder='Ex: 3'
-                       (emitter)="inputReturn($event, 'languages', i, 'listening')">
+                       (emitter)="inputReturn($event, 'languages', [i, 'listening'])">
             </app-input>
         </div>
     </div>

@@ -20,13 +20,16 @@ export class RegisterComponent implements OnInit, AfterContentInit {
     this.form = new RegisterFormModel();
   }
 
-  inputReturn(obj: InputFieldModel, type: string, i = 0, field = '') {
-    if (type === 'languages') {
-      this.form.languages[i][field].value = obj.value;
-      this.form.languages[i][field].errors = obj.errors;
+  inputReturn(obj: InputFieldModel, type: string, path: Array<number | string> = []) {
+    if (type === 'company') {
+      this.form.company[path[0]].value = obj.value;
+      this.form.company[path[0]].errors = obj.errors;
+    } else if (type === 'languages') {
+      this.form.languages[path[0]][path[1]].value = obj.value;
+      this.form.languages[path[0]][path[1]].errors = obj.errors;
     } else if (type === 'skills') {
-      this.form.skills[i].value = obj.value;
-      this.form.skills[i].errors = obj.errors;
+      this.form.skills[path[0]].value = obj.value;
+      this.form.skills[path[0]].errors = obj.errors;
     } else {
       this.form[type] = obj;
     }
@@ -35,7 +38,6 @@ export class RegisterComponent implements OnInit, AfterContentInit {
 
   submit() {
     console.log(this.form.prepare2send());
-    console.log(this.form.getPropertiesByForm());
   }
 
   addNewSkill() {
