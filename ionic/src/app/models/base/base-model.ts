@@ -9,7 +9,7 @@ interface PREPARE_TO_SEND_RETURN {
                     Array<string | PREPARE_TO_SEND_RETURN>;
 }
 // tslint:disable-next-line: class-name
-type VALID_TYPES = InputFieldModel | BaseFormModel | Array<VALID_TYPES>;
+type VALID_TYPES = { x: InputFieldModel | BaseFormModel | Array<VALID_TYPES> };
 
 
 
