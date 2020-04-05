@@ -1,7 +1,7 @@
 import { MaskService } from './../../services/mask.service';
 import { ValidationService } from '../../services/validation.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { InputFieldModel } from 'src/app/models/input-field-model';
+import { InputFieldModel } from './../../models/base/input-field-model';
 
 
 @Component({
@@ -41,7 +41,7 @@ export class InputComponent implements OnInit {
 
     // mask
     if (this.type === 'phone') {
-      this.mask.maskPhoneUS(event);
+      event.value = this.mask.maskPhoneUS(event.value);
     }
 
     // validation
@@ -50,7 +50,7 @@ export class InputComponent implements OnInit {
     } else if (this.type === 'password') {
       errors = this.validation.validatePassword(event.value);
     } else if (this.type === 'phone') {
-      errors = this.validation.validatePhone(event.value);
+      errors = this.validation.validatePhoneUS(event.value);
     }
 
     this.errors = errors;
@@ -80,6 +80,25 @@ export class InputComponent implements OnInit {
       ret = 'password';
     }
 
+    return ret;
+  }
+
+  getMaxLength(): string {
+    let ret = '255';
+
+    switch (this.type) {
+      case 'phone':
+        ret = '13';
+        break;
+      case 'cpf':
+        ret = '14';
+        break;
+      case 'cnpj':
+        ret = '18';
+        break;
+      default:
+        break;
+    }
     return ret;
   }
 

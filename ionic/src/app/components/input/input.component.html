@@ -8,6 +8,7 @@
     class="input"
     [type]="getInputType()"
     [value]="value"
+    [maxlength]="getMaxLength()"
     [placeholder]="example"
     (input)="onInput($event.target)"
     [ngClass]="{ 'input-error': hasError() }"

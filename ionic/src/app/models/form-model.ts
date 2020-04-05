@@ -1,8 +1,8 @@
-import { BaseModel } from './base-model';
-import { InputFieldModel } from './input-field-model';
+import { BaseFormModel } from './base/base-model';
+import { InputFieldModel } from './base/input-field-model';
 
 // this is an example
-export class FormModel extends BaseModel {
+export class FormModel extends BaseFormModel {
     email: InputFieldModel;
     password: InputFieldModel;
     phone: InputFieldModel;

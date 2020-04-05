@@ -7,63 +7,110 @@ export class MaskService {
 
   constructor() { }
 
-  maskPhoneBR(event) {
-    // I'm using the brazilian format for phones "(00)0000-0000" or "(00)00000-0000".
-    // We decide if we should use the 9 or 8 digit format based on its value length.
-    let value: string = event.value;
-
-    if (value.length > 14) {
-      value = value.substr(0, value.length - 1);
+  maskPhoneBR(value: string): string {
+    value = value.replace(/[^0-9]/g, '');
+    if (value.length > 11) {
+      value = value.substr(0, 11);
     }
 
-    const len = value.length;
-    if (len === 1 && value[len - 1] === '(') {
-      value = '';
-    } else if (len === 1) {
+    const len = (value.length);
+
+    if (len > 0) {
       value = '(' + value;
-    } else if (len === 4  && value[len - 1] === ')') {
-      value = value.substr(0, len - 1);
-    } else if (len === 4) {
-      value = value.substr(0, len - 1) + ')' + value[len - 1];
-    } else if (len === 9  && value[len - 1] === '-') {
-      value = value.substr(0, len - 1);
-    } else if (len === 9) {
-      value = value.substr(0, len - 1) + '-' + value[len - 1];
-    } else if (len === 13  && value[9] === '-') {
-      value = value.replace('-', '');
-      value = value.substr(0, 8) + '-' + value.substr(8, len - 1);
-    } else if (len === 14) {
-      value = value.replace('-', '');
-      value = value.substr(0, 9) + '-' + value.substr(9, len - 1);
+    }
+    if (len > 2) {
+      value = value.slice(0, 3) + ')' + value.slice(3);
+    }
+    if (len > 6) {
+      const dashPosition = len === 11 ? 9 : 8;
+      value = value.slice(0, dashPosition) + '-' + value.slice(dashPosition);
     }
 
-    event.value = value;
+    return value;
   }
 
-  maskPhoneUS(event) {
-    // I'm using the brazilian format for phones "(00)0000-0000" or "(00)00000-0000".
-    // We decide if we should use the 9 or 8 digit format based on its value length.
-    let value: string = event.value;
-
-    if (value.length > 13) {
-      value = value.substr(0, value.length - 1);
+  maskPhoneUS(value: string): string {
+    value = value.replace(/[^0-9]/g, '');
+    if (value.length > 10) {
+      value = value.substr(0, 10);
     }
 
-    const len = value.length;
-    if (len === 1 && value[len - 1] === '(') {
-      value = '';
-    } else if (len === 1) {
+    const len = (value.length);
+
+    if (len > 0) {
       value = '(' + value;
-    } else if (len === 5  && value[len - 1] === ')') {
-      value = value.substr(0, len - 1);
-    } else if (len === 5) {
-      value = value.substr(0, len - 1) + ')' + value[len - 1];
-    } else if (len === 9  && value[len - 1] === '-') {
-      value = value.substr(0, len - 1);
-    } else if (len === 9) {
-      value = value.substr(0, len - 1) + '-' + value[len - 1];
+    }
+    if (len > 3) {
+      value = value.slice(0, 4) + ')' + value.slice(4);
+    }
+    if (len > 6) {
+      value = value.slice(0, 8) + '-' + value.slice(8);
     }
 
-    event.value = value;
+    return value;
+  }
+
+  maskCNPJ(value: string): string {
+    value = value.replace(/[^0-9]/g, '');
+    if (value.length > 14) {
+      value = value.substr(0, 14);
+    }
+
+    const len = (value.length);
+
+    if (len > 2) {
+      value = value.slice(0, 2) + '.' + value.slice(2);
+    }
+    if (len > 5) {
+      value = value.slice(0, 6) + '.' + value.slice(6);
+    }
+    if (len > 8) {
+      value = value.slice(0, 10) + '/' + value.slice(10);
+    }
+    if (len > 12) {
+      value = value.slice(0, 15) + '-' + value.slice(15);
+    }
+    if (len > 14) {
+      value = value.slice(0, 18) + ')' + value.slice(18);
+    }
+
+    return value;
+  }
+
+  maskCPF(value: string): string {
+    value = value.replace(/[^0-9]/g, '');
+    if (value.length > 11) {
+      value = value.substr(0, 11);
+    }
+
+    const len = (value.length);
+
+    if (len > 3) {
+      value = value.slice(0, 3) + '.' + value.slice(3);
+    }
+    if (len > 6) {
+      value = value.slice(0, 7) + '.' + value.slice(7);
+    }
+    if (len > 9) {
+      value = value.slice(0, 11) + '-' + value.slice(11);
+    }
+
+    return value;
+  }
+
+  maskLanguageLevel(value: string): string {
+    value = value.replace(/[^0-9]/g, '');
+
+    const numericalValue = Number(value);
+
+    if (numericalValue < 1 || numericalValue > 5) {
+      if (value.length > 1) {
+        value = value.substr(0, 1);
+      } else {
+        value = '';
+      }
+    }
+
+    return value;
   }
 }
