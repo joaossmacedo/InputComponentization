@@ -1,19 +1,7 @@
 # Input Componentization
 
-## How to see a demo of this project?
-1. Open either the 'angular' or the 'ionic' folder of this project in the terminal/bash.
-2. Run 'npm install'.
-
-### If you selected 'angular'
-3. Run 'ng serve'.
-4. Open 'localhost:4200' at your browser.
-
-### If you selected 'ionic'
-3. Run 'ionic serve'.
-4. Open 'localhost:8100' at your browser.
-
 ## What is the objective of the project?
-Create an input component that receive values such as type, placeholder and initialValue, create an input field based on those parameters and then return the value and errors whenever there is a change on the field.
+Create an input component that receive values such as type, placeholder and initialValue, creates an input field based on those parameters and then return the value and errors whenever there is a change on the field.
 
 ![Input Component Logic](/assets/inputComponent.png)
 
@@ -29,3 +17,15 @@ As long as you always return the value of the input and which errors it contain,
 
 ## When should I not use this concept?
 1. Medium/small project with a low number of inputs.
+
+## How to see a demo of this project?
+1. Open either the 'angular' or the 'ionic' folder of this project in the terminal/bash.
+2. Run 'npm install'.
+
+### If you selected 'angular'
+3. Run 'ng serve'.
+4. Open 'localhost:4200' at your browser.
+
+### If you selected 'ionic'
+3. Run 'ionic serve'.
+4. Open 'localhost:8100' at your browser.
