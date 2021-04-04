@@ -3,7 +3,7 @@
 ## What is the objective of the project?
 Create an input component that receive values such as type, placeholder and initialValue, creates an input field based on those parameters and then return the value and errors whenever there is a change on the field.
 
-![Input Component Logic](/assets/inputComponent.png)
+![Input Component Logic](../assets/inputComponent.png)
 
 ## Why should I use this concept?
 1. Maintainability and reuse<br/>
